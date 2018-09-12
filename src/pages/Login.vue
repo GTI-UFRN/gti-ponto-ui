@@ -52,8 +52,14 @@
 		methods: {
 			login() {
 				const { username, password } = this;
-				api.getToken(username, password).then( data => {
-					console.log(data)
+				api.getToken(username, password)
+				.then( ({data}) => {
+					this.$router.push('/')
+					this.username = this.password = ''
+					window.token = data.token
+				})
+				.catch( (e) => {
+					alert('Login ou senha inválido!')
 				})
 			}
 		}

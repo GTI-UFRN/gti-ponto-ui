@@ -24,6 +24,11 @@ export default {
     }
   },
   created() {
+    if(!window.token) {
+      this.$router.push('/login')
+    }else {
+      
+    }
     setInterval(() => {
       const today = new Date()
       var h = today.getHours()
