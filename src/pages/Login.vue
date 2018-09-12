@@ -11,7 +11,7 @@
 					<q-field
 						icon="account_circle"
 					>
-						<q-input v-model="email" float-label="Email" />
+						<q-input v-model="username" float-label="Usuario" />
 					</q-field>
 					<q-field
 						icon="lock"
@@ -21,7 +21,7 @@
 				<br>
 				<br>
 				<q-btn
-				@click="$router.push('/')"
+				@click="login"
 				rounded
 				icon="check_circle"
 				color="primary"
@@ -40,11 +40,21 @@
 </template>
 
 <script>
+	import api from '../services/auth/api'
+	
 	export default {
 		data() {
 			return {
-				email: '',
+				username: '',
 				password: ''
+			}
+		},
+		methods: {
+			login() {
+				const { username, password } = this;
+				api.getToken(username, password).then( data => {
+					console.log(data)
+				})
 			}
 		}
 	}
