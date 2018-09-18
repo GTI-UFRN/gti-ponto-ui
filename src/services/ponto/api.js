@@ -15,8 +15,8 @@ const api = {
   checkin(userId) {
     return instance.post('/times/checkin', { userId })
   },
-  checkout(userId) {
-    return instance.post('/times/checkout', { userId })
+  checkout(_id) {
+    return instance.post('/times/checkout', { _id })
   }
 }
 

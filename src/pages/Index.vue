@@ -30,23 +30,35 @@ export default {
       time: '',
       user: {},
       isCheckin: true,
+      openTime: {}
     }
   },
   methods: {
     checkin() {
       ponto.checkin(window.user._id).then( ({data}) => {
-        this.isCheckin = true
+        this.updateStatus()
       })
       .catch(e => {
-        this.isCheckin = false
+        this.updateStatus()
       })
     },
     checkout() {
-      ponto.checkout(window.user._id).then( ({data}) => {
-        this.isCheckin = false
+      ponto.checkout(this.openTime._id).then( ({data}) => {
+        this.updateStatus()
       })
       .catch(e => {
-        this.isCheckin = true
+        this.updateStatus()
+      })
+    },
+    updateStatus() {
+      ponto.getUserStatus(window.user._id).then( ({data}) => {
+        console.log(data);
+         if(!data.data) {
+           this.isCheckin = true
+         }else {
+            this.isCheckin = false
+            this.openTime = data.data
+         }
       })
     }
   },
@@ -57,14 +69,7 @@ export default {
       auth.getUser(window.user._id).then( ({data}) => {
         this.user = data.data
       })
-      ponto.getUserStatus(window.user._id).then( ({data}) => {
-        console.log(data);
-         if(!data.data) {
-           this.isCheckin = true
-         }else {
-            this.isCheckin = false
-         }
-      })
+      this.updateStatus()
     }
     setInterval(() => {
       const today = new Date()
