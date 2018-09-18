@@ -40,7 +40,7 @@
 </template>
 
 <script>
-	import api from '../services/auth/api'
+	import auth from '../services/auth/api'
 	
 	export default {
 		data() {
@@ -52,11 +52,12 @@
 		methods: {
 			login() {
 				const { username, password } = this;
-				api.getToken(username, password)
-				.then( ({data}) => {
+				auth.getToken(username, password)
+				.then( (user) => {
 					this.$router.push('/')
 					this.username = this.password = ''
-					window.token = data.token
+					window.user = user
+					
 				})
 				.catch( (e) => {
 					alert('Login ou senha inválido!')

@@ -36,7 +36,7 @@
           <q-item-side icon="list" />
           <q-item-main label="Espelho"/>
         </q-item>
-        <q-item @click.native="$router.push('/login')">
+        <q-item @click.native="logout">
           <q-item-side icon="exit_to_app" />
           <q-item-main label="Sair"/>
         </q-item>
@@ -50,23 +50,33 @@
 </template>
 
 <script>
-import { openURL } from 'quasar'
+import { openURL } from "quasar";
 
 export default {
-  name: 'MyLayout',
-  data () {
+  name: "MyLayout",
+  data() {
     return {
-      leftDrawerOpen: false,
-    }
+      leftDrawerOpen: false
+    };
   },
   methods: {
-    openURL
+    openURL,
+    logout() {
+      delete window.user;
+      this.$router.push("/login");
+    }
   }
-}
+};
 </script>
 
 <style>
 .bg-nav {
-	  background: linear-gradient(45deg, rgb(100, 168, 121) 0%, rgb(53, 155, 172) 40%, rgb(52, 152, 185) 60%, rgb(71, 160, 152) 100%) !important;
-	}
+  background: linear-gradient(
+    45deg,
+    rgb(100, 168, 121) 0%,
+    rgb(53, 155, 172) 40%,
+    rgb(52, 152, 185) 60%,
+    rgb(71, 160, 152) 100%
+  ) !important;
+}
 </style>
