@@ -9,6 +9,10 @@
       return {}
     },
     methods: {},
-    created() {}
+    created() {
+      if (!window.user) {
+        this.$router.push("/login")
+      }
+    }
   }
 </script>
