@@ -2,6 +2,7 @@
   <q-page class="flex flex-center column">
     <span class="clock">{{this.time}}</span>
     <p>Boa tarde, {{user.name}}!</p>
+    <p v-if="openTime._id">Tempo de trabalho: {{this.workTime}}</p>
     <q-btn @click="checkin" v-if="isCheckin" color="green" size="lg">
       Entrada
     </q-btn>
@@ -17,17 +18,13 @@
 <script>
   import auth from '../services/auth/api'
   import ponto from '../services/ponto/api'
-// add zero in front of numbers < 10
-function checkTime(i) {
-    if (i < 10) {i = "0" + i} 
-    return i
-}
 
 export default {
   name: 'PageIndex',
   data() {
     return {
       time: '',
+      workTime: '',
       user: {},
       isCheckin: true,
       openTime: {}
@@ -55,6 +52,7 @@ export default {
         console.log(data);
          if(!data.data) {
            this.isCheckin = true
+           this.openTime = {}
          }else {
             this.isCheckin = false
             this.openTime = data.data
@@ -73,13 +71,14 @@ export default {
     }
     setInterval(() => {
       const today = new Date()
-      var h = today.getHours()
-      var m = today.getMinutes()
-      var s = today.getSeconds()
-      m = checkTime(m)
-      s = checkTime(s)
-      this.time = h + ":" + m + ":" + s
-    }, 500)
+      if(this.openTime.checkin) {
+        const wt = moment.duration(today - new Date(this.openTime.checkin))
+        this.workTime = moment.utc(wt.asMilliseconds()).format("HH:mm:ss")
+        console.log(this.workTime);
+        
+      } 
+      this.time = moment().format("dddd, HH:mm:ss")
+    }, 1000)
   }
 }
 </script>
