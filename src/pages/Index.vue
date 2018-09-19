@@ -1,7 +1,8 @@
 <template>
   <q-page class="flex flex-center column">
+    <span class="day">{{this.day}}.</span>
     <span class="clock">{{this.time}}</span>
-    <p>Boa tarde, {{user.name}}!</p>
+    <p>Usuário, {{user.name}}</p>
     <p v-if="openTime._id">Tempo de trabalho: {{this.workTime}}</p>
     <q-btn @click="checkin" v-if="isCheckin" color="green" size="lg">
       Entrada
@@ -28,7 +29,8 @@
         workTime: "",
         user: {},
         isCheckin: true,
-        openTime: {}
+        openTime: {}, 
+        day: moment().format("ddd DD MMM")
       }
     },
     methods: {
@@ -88,6 +90,9 @@
 
 <style>
 .clock {
-  font-size: 68px
+  font-size: 58px
+}
+.day {
+  font-size: 48px
 }
 </style>
