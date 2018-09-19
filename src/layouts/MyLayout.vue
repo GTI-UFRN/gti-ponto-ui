@@ -50,23 +50,23 @@
 </template>
 
 <script>
-import { openURL } from "quasar";
+import { openURL } from "quasar"
 
 export default {
   name: "MyLayout",
   data() {
     return {
       leftDrawerOpen: false
-    };
+    }
   },
   methods: {
     openURL,
     logout() {
-      delete window.user;
-      this.$router.push("/login");
+      delete window.user
+      this.$router.push("/login")
     }
   }
-};
+}
 </script>
 
 <style>

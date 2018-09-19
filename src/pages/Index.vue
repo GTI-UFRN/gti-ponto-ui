@@ -39,6 +39,7 @@
           .checkin(window.user._id)
           .then(({ data }) => {
             this.updateStatus()
+            this.logout()
           })
           .catch(e => {
             this.updateStatus()
@@ -49,6 +50,7 @@
           .checkout(this.openTime._id)
           .then(({ data }) => {
             this.updateStatus()
+            this.logout()
           })
           .catch(e => {
             this.updateStatus()
@@ -56,7 +58,6 @@
       },
       updateStatus() {
         ponto.getUserStatus(window.user._id).then(({ data }) => {
-          console.log(data)
           if (!data.data) {
             this.isCheckin = true
             this.openTime = {}
@@ -65,6 +66,12 @@
             this.openTime = data.data
           }
         })
+      },
+      logout() {
+        setTimeout(() => {
+          delete window.user
+          this.$router.push("/login")
+        }, 10000)
       }
     },
     created() {
