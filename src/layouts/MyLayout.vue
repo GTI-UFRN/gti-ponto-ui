@@ -32,7 +32,7 @@
           <q-item-side icon="home" />
           <q-item-main label="Início"/>
         </q-item>
-        <q-item @click.native="$router.push('/')">
+        <q-item @click.native="$router.push('/history')">
           <q-item-side icon="list" />
           <q-item-main label="Espelho"/>
         </q-item>

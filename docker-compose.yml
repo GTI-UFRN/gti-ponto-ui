@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  ponto:
+    build: .
+    ports:
+      - "80:80"
