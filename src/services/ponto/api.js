@@ -1,4 +1,4 @@
-import instance from './instace' 
+import instance from '../auth/instace' 
 
 function parseJwt(token) {
   try {
@@ -10,13 +10,13 @@ function parseJwt(token) {
 
 const api = {
   getUserStatus(userId) {
-    return instance.get('/times/'+userId)
+    return instance.get('/ponto/times/'+userId)
   },
   checkin(userId) {
-    return instance.post('/times/checkin', { userId })
+    return instance.post('/ponto/times/checkin', { userId })
   },
   checkout(_id) {
-    return instance.post('/times/checkout', { _id })
+    return instance.post('/ponto/times/checkout', { _id })
   }
 }
 
