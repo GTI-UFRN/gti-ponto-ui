@@ -17,6 +17,9 @@ const api = {
   },
   checkout(_id) {
     return instance.post('/ponto/times/checkout', { _id })
+  },
+  getMirror(userId, range) {
+    return instance.get(`/ponto/times/mirror/${userId}/${9}`, {params: { range }})
   }
 }
 
