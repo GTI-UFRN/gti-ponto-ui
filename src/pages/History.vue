@@ -1,5 +1,12 @@
 <template>
-  <h1>espelho</h1>
+  <div>
+    <q-table
+    title="Espelho de Ponto"
+    :data="mirror"
+    :columns="columns"
+    row-key="date"
+  />
+  </div>
 </template>
 
 <script>
@@ -10,7 +17,7 @@ function getMonthDateRange() {
   const year = date.getFullYear()
   const month = date.getMonth()
 
-  const startDate = moment([year, month - 1]);
+  const startDate = moment([year, month]);
   const endDate = moment(startDate).endOf('month');
 
   return { start: startDate.toDate(), end: endDate.toDate() };
@@ -18,7 +25,44 @@ function getMonthDateRange() {
 export default {
   name: "HistoryView",
   data() {
-    return {}
+    return {
+      columns: [
+      {
+        name: 'date',
+        label: 'Data',
+        field: 'date',
+        align: 'left',
+        format: val => moment(val).format("DD/MM/Y")
+      },
+      {
+        name: 'checkin',
+        label: 'Entrada',
+        field: 'checkin',
+        align: 'left',
+        format: val => moment(val).format("HH:mm")
+      },
+      {
+        name: 'checkout',
+        label: 'Saida',
+        field: 'checkout',
+        align: 'left',
+        format: val => {
+          return val ? moment(val).format("HH:mm") : '--:--'
+        }
+      },
+      {
+        name: 'worktime',
+        label: 'Horas trab.',
+        field: time => {
+          if(!time.checkout) return '--:--'
+          const wt = moment.duration( new Date(time.checkout) - new Date(time.checkin))
+          return moment.utc(wt.asMilliseconds()).format("HH:mm")
+        },
+        align: 'left',
+      },
+    ],
+      mirror: []
+    }
   },
   methods: {},
   created() {
@@ -26,10 +70,10 @@ export default {
       this.$router.push("/login")
       return
     }
-    console.log(getMonthDateRange())
     ponto.getMirror(window.user._id, getMonthDateRange()).then(({ data }) => {
       if (data.data) {
         console.log(data.data)
+        this.mirror = data.data
       }
     })
   }
