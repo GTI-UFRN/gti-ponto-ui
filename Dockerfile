@@ -1,9 +1,10 @@
 # build stage
 FROM node:9.11.1-alpine as build-stage
 WORKDIR /app
-COPY . .
+COPY package*.json ./
 RUN  export NODE_ENV=production
 RUN npm install
+COPY . ./
 RUN node node_modules/quasar-cli/bin/quasar-build
 
 # production stage
