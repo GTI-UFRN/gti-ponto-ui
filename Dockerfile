@@ -2,9 +2,9 @@
 FROM node:9.11.1-alpine as build-stage
 WORKDIR /app
 COPY package*.json ./
-RUN  export NODE_ENV=production && npm install -g quasar-cli @vue/cli @vue/cli-init && npm install
+RUN  export NODE_ENV=production && npm install
 COPY . .
-RUN quasar build
+RUN  node node_modules/quasar-cli/bin/quasar-build
 
 # production stage
 FROM nginx:1.13.12-alpine as production-stage
