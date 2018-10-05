@@ -20,7 +20,15 @@ const api = {
   },
   getMirror(userId, range) {
     return instance.get(`/ponto/times/mirror/${userId}/${9}`, {params: { range }})
-  }
+  },
+  async getServerTime(id) {
+    try {
+      const { data } = await instance.get('/')
+      return data.time
+    } catch (error) {
+      throw error;
+    }
+  },
 }
 
 export default api

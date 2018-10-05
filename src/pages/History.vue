@@ -13,7 +13,7 @@
 import moment from "moment"
 import ponto from "../services/ponto/api"
 function getMonthDateRange() {
-  const date = new Date();
+  const date = window.time
   const year = date.getFullYear()
   const month = date.getMonth()
 
@@ -72,7 +72,6 @@ export default {
     }
     ponto.getMirror(window.user._id, getMonthDateRange()).then(({ data }) => {
       if (data.data) {
-        console.log(data.data)
         this.mirror = data.data
       }
     })

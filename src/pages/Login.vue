@@ -41,7 +41,7 @@
 
 <script>
 	import auth from '../services/auth/api'
-	
+	import ponto from '../services/ponto/api'
 	export default {
 		data() {
 			return {
@@ -63,6 +63,11 @@
 					alert('Login ou senha inválido!')
 				})
 			}
+		},
+		created() {
+			ponto.getServerTime().then((time) => {
+				window.time = new Date(time)
+			})
 		}
 	}
 	
