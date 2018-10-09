@@ -84,7 +84,7 @@
         this.updateStatus()
       }
       setInterval(() => {
-        const today = new Date()
+        let today = new Date()
         today = window.time < today ? window.time - today : today - window.time 
         if (this.openTime._id) {
           const wt = moment.duration(today - new Date(this.openTime.checkin))
