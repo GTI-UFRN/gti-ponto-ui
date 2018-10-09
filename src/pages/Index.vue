@@ -84,7 +84,8 @@
         this.updateStatus()
       }
       setInterval(() => {
-        const today = window.time
+        const today = new Date()
+        today = window.time < today ? window.time - today : today - window.time 
         if (this.openTime._id) {
           const wt = moment.duration(today - new Date(this.openTime.checkin))
           this.workTime = moment.utc(wt.asMilliseconds()).format("HH:mm:ss")
