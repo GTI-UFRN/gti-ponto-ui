@@ -64,11 +64,6 @@
 				})
 			}
 		},
-		created() {
-			ponto.getServerTime().then((time) => {
-				window.time = new Date(time)
-			})
-		}
 	}
 	
 </script>

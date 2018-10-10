@@ -81,13 +81,15 @@
         auth.getUser(window.user._id).then(({ data }) => {
           this.user = data.data
         })
+        ponto.getServerTime().then((time) => {
+          window.time = new Date(time)
+        })
         this.updateStatus()
       }
       setInterval(() => {
-        let today = new Date()
-        today = window.time < today ? window.time - today : today - window.time 
-        if (this.openTime._id) {
-          const wt = moment.duration(today - new Date(this.openTime.checkin))
+        if (this.openTime._id && window.time) {
+          window.time.setMilliseconds(window.time.getMilliseconds()+1000)
+          const wt = moment.duration(window.time - new Date(this.openTime.checkin))
           this.workTime = moment.utc(wt.asMilliseconds()).format("HH:mm:ss")
         }
         this.time = moment().format("HH:mm:ss")
