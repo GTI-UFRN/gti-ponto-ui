@@ -83,12 +83,17 @@
         })
         ponto.getServerTime().then((time) => {
           window.time = new Date(time)
+          window.time.setMilliseconds(window.time.getMilliseconds()+1000)
+          setInterval(() => {
+            if (window.time) {
+              window.time.setMilliseconds(window.time.getMilliseconds()+1000)
+            }
+          }, 1000)
         })
         this.updateStatus()
       }
       setInterval(() => {
         if (this.openTime._id && window.time) {
-          window.time.setMilliseconds(window.time.getMilliseconds()+1000)
           const wt = moment.duration(window.time - new Date(this.openTime.checkin))
           this.workTime = moment.utc(wt.asMilliseconds()).format("HH:mm:ss")
         }
