@@ -14,7 +14,7 @@
 
         <q-toolbar-title>
           GTI Ponto
-          <div slot="subtitle">Sitema de Ponto Gerência de Tecnologia da Informação - EAJ</div>
+          <div slot="subtitle">Sistema de Ponto Gerência de Tecnologia da Informação - EAJ</div>
         </q-toolbar-title>
       </q-toolbar>
     </q-layout-header>

@@ -7,7 +7,7 @@
 				<div class="flex flex-center">
 					<img src="statics/logo.png" alt="">
 				</div>
-				<form>
+				<form @submit.prevent="login">
 					<q-field
 						icon="account_circle"
 					>
@@ -21,7 +21,7 @@
 				<br>
 				<br>
 				<q-btn
-				@click="login"
+				type="submit"
 				rounded
 				icon="check_circle"
 				color="primary"
