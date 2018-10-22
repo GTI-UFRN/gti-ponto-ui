@@ -2,6 +2,7 @@
   <div>
     <q-table
     title="Espelho de Ponto"
+    no-data-label="Nenhum registro encontrado!"
     :data="mirror"
     :columns="columns"
     row-key="date"
@@ -52,7 +53,7 @@ export default {
       },
       {
         name: 'worktime',
-        label: 'Horas trab.',
+        label: 'Tempo',
         field: time => {
           if(!time.checkout) return '--:--'
           const wt = moment.duration( new Date(time.checkout) - new Date(time.checkin))
