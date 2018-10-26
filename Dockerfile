@@ -5,11 +5,11 @@ COPY package*.json ./
 RUN  export NODE_ENV=production
 RUN npm install
 COPY . ./
-RUN node node_modules/quasar-cli/bin/quasar-build
+RUN node node_modules/quasar-cli/bin/quasar-build -m pwa
 
 # production stage
 FROM nginx:1.13.12-alpine as production-stage
-COPY --from=build-stage /app/dist/spa-mat /usr/share/nginx/html
+COPY --from=build-stage /app/dist/pwa-mat /usr/share/nginx/html
 COPY --from=build-stage /app/default.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
