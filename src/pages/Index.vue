@@ -78,13 +78,15 @@
       if (!window.user) {
         this.$router.push("/login")
       } else {
+        clearInterval(window.clock1)
+        clearInterval(window.clock2)
         auth.getUser(window.user._id).then(({ data }) => {
           this.user = data.data
         })
         ponto.getServerTime().then((time) => {
           window.time = new Date(time)
           window.time.setMilliseconds(window.time.getMilliseconds()+1000)
-          setInterval(() => {
+          window.clock1 = setInterval(() => {
             if (window.time) {
               window.time.setMilliseconds(window.time.getMilliseconds()+1000)
             }
@@ -92,12 +94,13 @@
         })
         this.updateStatus()
       }
-      setInterval(() => {
+      window.clock2 = setInterval(() => {
         if (this.openTime._id && window.time) {
           const wt = moment.duration(window.time - new Date(this.openTime.checkin))
           this.workTime = moment.utc(wt.asMilliseconds()).format("HH:mm:ss")
         }
         this.time = moment().format("HH:mm:ss")
+        window.timerOn = true
       }, 1000)
     }
   }
