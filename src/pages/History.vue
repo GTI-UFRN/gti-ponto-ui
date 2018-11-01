@@ -1,18 +1,28 @@
 <template>
-  <div>
+  <q-page padding>
+    <div>
+      <h1 class="q-headline">Espelho de ponto</h1>
+      <q-datetime v-model="initDate" format="DD/MM/YY" type="date" float-label="Data inicial" />
+      <q-datetime v-model="endDate" format="DD/MM/YY" type="date" float-label="Data final"/>
+      <br>
+      <q-btn @click="getMirror" color="green">Buscar</q-btn>
+    </div>
+    <br>
     <q-table
-    title="Espelho de Ponto"
+    :title="'Resumo entre ' + formatDate(initDate) + ' - ' + formatDate(endDate) "
     no-data-label="Nenhum registro encontrado!"
     :data="mirror"
     :columns="columns"
+    :pagination="{rowsPerPage: 25}"
     row-key="date"
   />
-  </div>
+  </q-page>
 </template>
 
 <script>
 import moment from "moment"
 import ponto from "../services/ponto/api"
+
 function getMonthDateRange() {
   const date = window.time
   const year = date.getFullYear()
@@ -23,10 +33,15 @@ function getMonthDateRange() {
 
   return { start: startDate.toDate(), end: endDate.toDate() };
 }
+
+const mothRange = getMonthDateRange()
+
 export default {
   name: "HistoryView",
   data() {
     return {
+      initDate: mothRange.start,
+      endDate: mothRange.end,
       columns: [
       {
         name: 'date',
@@ -65,17 +80,30 @@ export default {
       mirror: []
     }
   },
-  methods: {},
+  methods: {
+    formatDate(d) {
+      return moment(d).format("DD/MM/Y")
+    },
+    getMirror() {
+      const range = { start: this.initDate, end: this.endDate }
+      ponto.getMirror(window.user._id, range).then(({ data }) => {
+        if (data.data) {
+          this.mirror = data.data
+        }
+      })
+    }
+  },
+  watch: {
+    initDate: function (val) {
+        this.endDate = moment(val).endOf('month').toDate();
+    }
+  },
   created() {
     if (!window.user) {
       this.$router.push("/login")
       return
     }
-    ponto.getMirror(window.user._id, getMonthDateRange()).then(({ data }) => {
-      if (data.data) {
-        this.mirror = data.data
-      }
-    })
+    this.getMirror()
   }
 }
 </script>

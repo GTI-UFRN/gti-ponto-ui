@@ -60,6 +60,7 @@ module.exports = function (ctx) {
         'QCard',
         'QCardMain',
         'QTable',
+        'QDatetime'
       ],
       directives: [
         'Ripple'
@@ -67,9 +68,9 @@ module.exports = function (ctx) {
       // Quasar plugins
       plugins: [
         'Notify'
-      ]
+      ],
       // iconSet: ctx.theme.mat ? 'material-icons' : 'ionicons'
-      // i18n: 'de' // Quasar language
+      i18n: 'pt-br'
     },
     // animations: 'all' --- includes all animations
     animations: [],
