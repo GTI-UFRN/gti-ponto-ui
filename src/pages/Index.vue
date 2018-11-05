@@ -41,7 +41,8 @@
             this.updateStatus()
             this.logout()
           })
-          .catch(e => {
+          .catch(({response}) => {
+            alert(response.data.msg)
             this.updateStatus()
           })
       },
@@ -52,7 +53,8 @@
             this.updateStatus()
             this.logout()
           })
-          .catch(e => {
+          .catch(({response}) => {
+            alert(response.data.msg)
             this.updateStatus()
           })
       },
