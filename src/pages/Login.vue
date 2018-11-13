@@ -54,7 +54,7 @@
 				const { username, password } = this;
 				auth.getToken(username, password)
 				.then( (user) => {
-					this.$router.push('/')
+					user.rules.includes('admin') ? this.$router.push('/dashborad') : this.$router.push('/')
 					this.username = this.password = ''
 					window.user = user
 					
