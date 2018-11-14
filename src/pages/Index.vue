@@ -15,8 +15,9 @@
 
 <script>
 import moment from 'moment'
-import auth from '../services/auth/api'
-import ponto from '../services/ponto/api'
+import auth from '../services/auth'
+import ponto from '../services/ponto'
+
 moment.locale('pt-BR')
 
 export default {

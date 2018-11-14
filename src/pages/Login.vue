@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import auth from '../services/auth/api'
+import auth from '../services/auth'
 
 export default {
   data () {

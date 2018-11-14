@@ -14,7 +14,7 @@
 
 <script>
 import moment from 'moment'
-import ponto from '../services/ponto/api'
+import ponto from '../services/ponto'
 
 function getMonthDateRange () {
   const date = window.time
