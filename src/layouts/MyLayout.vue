@@ -46,34 +46,34 @@
 </template>
 
 <script>
-import { openURL } from "quasar"
+import { openURL } from 'quasar'
 
 const defaultMenuItens = [
-  {icon: 'home', label: 'Início', router: '/'},
-  {icon: 'list', label: 'Espelho', router: '/history'},
+  { icon: 'home', label: 'Início', router: '/' },
+  { icon: 'list', label: 'Espelho', router: '/history' }
 ]
 
 const adminMenuItens = [
-  {icon: 'home', label: 'Início', router: '/'},
-  {icon: 'list', label: 'Espelhos', router: '/history-admin'},
-  {icon: 'account_circle', label: 'Usuários', router: '/users'},
+  { icon: 'home', label: 'Início', router: '/' },
+  { icon: 'list', label: 'Espelhos', router: '/history-admin' },
+  { icon: 'account_circle', label: 'Usuários', router: '/users' }
 ]
 
 export default {
-  name: "MyLayout",
-  data() {
+  name: 'MyLayout',
+  data () {
     return {
       leftDrawerOpen: false,
-      menuItens:  (window.user && window.user.rules.includes('admin')) ?  adminMenuItens : defaultMenuItens 
+      menuItens: (window.user && window.user.rules.includes('admin')) ? adminMenuItens : defaultMenuItens
     }
   },
   methods: {
     openURL,
-    logout() {
+    logout () {
       delete window.user
-      this.$router.push("/login")
+      this.$router.push('/login')
     },
-    gotTo(path) {
+    gotTo (path) {
       this.$router.push(path)
     }
   }

@@ -1,15 +1,15 @@
-import instance from './instace' 
+import instance from './instace'
 
-function parseJwt(token) {
+function parseJwt (token) {
   try {
-    return JSON.parse(atob(token.split('.')[1]));
+    return JSON.parse(atob(token.split('.')[1]))
   } catch (e) {
-    return null;
+    return null
   }
 }
 
 const api = {
-  async getToken(username, password) {
+  async getToken (username, password) {
     try {
       const { data } = await instance.post('/auth/token', {
         username,
@@ -18,11 +18,11 @@ const api = {
       instance.defaults.headers.common['Authorization'] = 'Bearer ' + data.token
       return parseJwt(data.token)
     } catch (error) {
-        throw error;
+      throw error
     }
   },
-  getUser(id) {
-    return instance.get('/users/'+id)
+  getUser (id) {
+    return instance.get('/users/' + id)
   }
 }
 

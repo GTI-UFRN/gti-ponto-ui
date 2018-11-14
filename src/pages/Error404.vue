@@ -10,8 +10,9 @@
     <q-btn
       color="secondary"
       style="width:200px;"
-      @click="$router.push('/')"
-    >Voltar</q-btn>
+      @click="$router.push('/')">
+      Voltar
+    </q-btn>
   </div>
 </template>
 

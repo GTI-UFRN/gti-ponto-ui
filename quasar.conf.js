@@ -24,14 +24,14 @@ module.exports = function (ctx) {
       // gzip: true,
       // analyze: true,
       // extractCSS: false,
-      // extendWebpack (cfg) {
-      //   cfg.module.rules.push({
-      //     enforce: 'pre',
-      //     test: /\.(js|vue)$/,
-      //     loader: 'eslint-loader',
-      //     exclude: /(node_modules|quasar)/
-      //   })
-      // }
+      extendWebpack (cfg) {
+        cfg.module.rules.push({
+          enforce: 'pre',
+          test: /\.(js|vue)$/,
+          loader: 'eslint-loader',
+          exclude: /(node_modules|quasar)/
+        })
+      }
     },
     devServer: {
       // https: true,
@@ -60,7 +60,9 @@ module.exports = function (ctx) {
         'QCard',
         'QCardMain',
         'QTable',
-        'QDatetime'
+        'QDatetime',
+        'QModal',
+        'QSelect'
       ],
       directives: [
         'Ripple'
@@ -88,14 +90,12 @@ module.exports = function (ctx) {
         orientation: 'portrait',
         background_color: '#fff',
         theme_color: '#000',
-        start_url: "/",
-        icons: [
-          {
-            'src': 'statics/icons/favicon.png',
-            'sizes': '192x192',
-            'type': 'image/png'
-          }
-        ]
+        start_url: '/',
+        icons: [{
+          'src': 'statics/icons/favicon.png',
+          'sizes': '192x192',
+          'type': 'image/png'
+        }]
       }
     },
     cordova: {

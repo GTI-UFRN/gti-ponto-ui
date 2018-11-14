@@ -7,7 +7,8 @@ const routes = [
       { path: '', component: () => import('pages/Index.vue') },
       { path: 'history', component: () => import('pages/History.vue') },
       { path: 'dashborad', component: () => import('pages/Dashboard.vue') },
-      { path: 'history-admin', component: () => import('pages/HistoryAdmin.vue') }
+      { path: 'history-admin', component: () => import('pages/HistoryAdmin.vue') },
+      { path: 'users', component: () => import('pages/UsersManager.vue') }
     ]
   },
   {

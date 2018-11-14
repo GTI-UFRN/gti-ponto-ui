@@ -13,106 +13,105 @@
   </q-page>
 </template>
 
-<style>
-</style>
-
 <script>
-  import moment from "moment"
-  import auth from "../services/auth/api"
-  import ponto from "../services/ponto/api"
-  moment.locale('pt-BR')
-  export default {
-    name: "PageIndex",
-    data() {
-      return {
-        time: "",
-        workTime: "",
-        user: {},
-        isCheckin: true,
-        openTime: {}, 
-        day: moment().format("ddd DD MMM")
-      }
-    },
-    methods: {
-      checkin() {
-        ponto
-          .checkin(window.user._id)
-          .then(({ data }) => {
-            this.updateStatus()
-            this.logout()
-          })
-          .catch(({response}) => {
-            alert(response.data.msg)
-            this.updateStatus()
-          })
-      },
-      checkout() {
-        ponto
-          .checkout(this.openTime._id)
-          .then(({ data }) => {
-            this.updateStatus()
-            this.logout()
-          })
-          .catch(({response}) => {
-            alert(response.data.msg)
-            this.updateStatus()
-          })
-      },
-      updateStatus() {
-        ponto.getUserStatus(window.user._id).then(({ data }) => {
-          if (!data.data) {
-            this.isCheckin = true
-            this.openTime = {}
-          } else {
-            this.isCheckin = false
-            this.openTime = data.data
-          }
-        })
-      },
-      logout() {
-        setTimeout(() => {
-          delete window.user
-          this.$router.push("/login")
-        }, 10000)
-      }
-    },
-    created() {
-      if (!window.user) {
-        this.$router.push("/login")
-      } else {
-        clearInterval(window.clock1)
-        clearInterval(window.clock2)
-        auth.getUser(window.user._id).then(({ data }) => {
-          this.user = data.data
-        })
-        ponto.getServerTime().then((time) => {
-          window.time = new Date(time)
-          window.time.setMilliseconds(window.time.getMilliseconds()+1000)
-          window.clock1 = setInterval(() => {
-            if (window.time) {
-              window.time.setMilliseconds(window.time.getMilliseconds()+1000)
-            }
-          }, 1000)
-        })
-        this.updateStatus()
-      }
-      window.clock2 = setInterval(() => {
-        if (this.openTime._id && window.time) {
-          const wt = moment.duration(window.time - new Date(this.openTime.checkin))
-          this.workTime = moment.utc(wt.asMilliseconds()).format("HH:mm:ss")
-        }
-        this.time = moment().format("HH:mm:ss")
-        window.timerOn = true
-      }, 1000)
+import moment from 'moment'
+import auth from '../services/auth/api'
+import ponto from '../services/ponto/api'
+moment.locale('pt-BR')
+
+export default {
+  name: 'PageIndex',
+  data () {
+    return {
+      time: '',
+      workTime: '',
+      user: {},
+      isCheckin: true,
+      openTime: {},
+      day: moment().format('ddd DD MMM')
     }
+  },
+  methods: {
+    checkin () {
+      ponto
+        .checkin(window.user._id)
+        .then(({ data }) => {
+          this.updateStatus()
+          this.logout()
+        })
+        .catch(({ response }) => {
+          alert(response.data.msg)
+          this.updateStatus()
+        })
+    },
+    checkout () {
+      ponto
+        .checkout(this.openTime._id)
+        .then(({ data }) => {
+          this.updateStatus()
+          this.logout()
+        })
+        .catch(({ response }) => {
+          alert(response.data.msg)
+          this.updateStatus()
+        })
+    },
+    updateStatus () {
+      ponto.getUserStatus(window.user._id).then(({ data }) => {
+        if (!data.data) {
+          this.isCheckin = true
+          this.openTime = {}
+        } else {
+          this.isCheckin = false
+          this.openTime = data.data
+        }
+      })
+    },
+    logout () {
+      setTimeout(() => {
+        delete window.user
+        this.$router.push('/login')
+      }, 10000)
+    }
+  },
+  created () {
+    if (!window.user) {
+      this.$router.push('/login')
+    } else {
+      user.rules.includes('admin') ? this.$router.push('/dashborad') : this.$router.push('/')
+      clearInterval(window.clock1)
+      clearInterval(window.clock2)
+      auth.getUser(window.user._id).then(({ data }) => {
+        this.user = data.data
+      })
+      ponto.getServerTime().then((time) => {
+        window.time = new Date(time)
+        window.time.setMilliseconds(window.time.getMilliseconds() + 1000)
+        window.clock1 = setInterval(() => {
+          if (window.time) {
+            window.time.setMilliseconds(window.time.getMilliseconds() + 1000)
+          }
+        }, 1000)
+      })
+      this.updateStatus()
+    }
+    window.clock2 = setInterval(() => {
+      if (this.openTime._id && window.time) {
+        const wt = moment.duration(window.time - new Date(this.openTime.checkin))
+        this.workTime = moment.utc(wt.asMilliseconds()).format('HH:mm:ss')
+      }
+      this.time = moment().format('HH:mm:ss')
+      window.timerOn = true
+    }, 1000)
   }
+}
 </script>
 
 <style>
 .clock {
-  font-size: 58px
+  font-size: 58px;
 }
 .day {
-  font-size: 48px
+  font-size: 48px;
 }
 </style>

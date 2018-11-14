@@ -3,88 +3,83 @@
     <div>
       <h1 class="q-headline">Espelho de ponto</h1>
       <q-datetime v-model="initDate" format="DD/MM/YY" type="date" float-label="Data inicial" />
-      <q-datetime v-model="endDate" format="DD/MM/YY" type="date" float-label="Data final"/>
+      <q-datetime v-model="endDate" format="DD/MM/YY" type="date" float-label="Data final" />
       <br>
       <q-btn @click="getMirror" color="green">Buscar</q-btn>
     </div>
     <br>
-    <q-table
-    :title="'Resumo entre ' + formatDate(initDate) + ' - ' + formatDate(endDate) "
-    no-data-label="Nenhum registro encontrado!"
-    :data="mirror"
-    :columns="columns"
-    :pagination="{rowsPerPage: 25}"
-    row-key="date"
-  />
+    <q-table :title="'Resumo entre ' + formatDate(initDate) + ' - ' + formatDate(endDate) " no-data-label="Nenhum registro encontrado!" :data="mirror" :columns="columns" :pagination="{rowsPerPage: 25}" row-key="date" />
   </q-page>
 </template>
 
 <script>
-import moment from "moment"
-import ponto from "../services/ponto/api"
+import moment from 'moment'
+import ponto from '../services/ponto/api'
 
-function getMonthDateRange() {
+function getMonthDateRange () {
   const date = window.time
   const year = date.getFullYear()
   const month = date.getMonth()
 
-  const startDate = moment([year, month]);
-  const endDate = moment(startDate).endOf('month');
+  const startDate = moment([year, month])
+  const endDate = moment(startDate).endOf('month')
 
-  return { start: startDate.toDate(), end: endDate.toDate() };
+  return { start: startDate.toDate(), end: endDate.toDate() }
 }
 
 const mothRange = getMonthDateRange()
 
 export default {
-  name: "HistoryView",
-  data() {
+  name: 'HistoryView',
+  data () {
     return {
       initDate: mothRange.start,
       endDate: mothRange.end,
       columns: [
-      {
-        name: 'date',
-        label: 'Data',
-        field: 'date',
-        align: 'left',
-        format: val => moment(val).format("DD/MM/Y")
-      },
-      {
-        name: 'checkin',
-        label: 'Entrada',
-        field: 'checkin',
-        align: 'left',
-        format: val => moment(val).format("HH:mm")
-      },
-      {
-        name: 'checkout',
-        label: 'Saida',
-        field: 'checkout',
-        align: 'left',
-        format: val => {
-          return val ? moment(val).format("HH:mm") : '--:--'
-        }
-      },
-      {
-        name: 'worktime',
-        label: 'Tempo',
-        field: time => {
-          if(!time.checkout) return '--:--'
-          const wt = moment.duration( new Date(time.checkout) - new Date(time.checkin))
-          return moment.utc(wt.asMilliseconds()).format("HH:mm")
+        {
+          name: 'date',
+          label: 'Data',
+          field: 'date',
+          align: 'left',
+          format: val => moment(val).format('DD/MM/Y')
         },
-        align: 'left',
-      },
-    ],
+        {
+          name: 'checkin',
+          label: 'Entrada',
+          field: 'checkin',
+          align: 'left',
+          format: val => moment(val).format('HH:mm')
+        },
+        {
+          name: 'checkout',
+          label: 'Saida',
+          field: 'checkout',
+          align: 'left',
+          format: val => {
+            return val ? moment(val).format('HH:mm') : '--:--'
+          }
+        },
+        {
+          name: 'worktime',
+          label: 'Tempo',
+          field: time => {
+            if (!time.checkout) return '--:--'
+            const wt = moment.duration(
+              new Date(time.checkout) - new Date(time.checkin)
+            )
+            return moment.utc(wt.asMilliseconds()).format('HH:mm')
+          },
+          align: 'left'
+        }
+      ],
       mirror: []
     }
   },
   methods: {
-    formatDate(d) {
-      return moment(d).format("DD/MM/Y")
+    formatDate (d) {
+      return moment(d).format('DD/MM/Y')
     },
-    getMirror() {
+    getMirror () {
       const range = { start: this.initDate, end: this.endDate }
       ponto.getMirror(window.user._id, range).then(({ data }) => {
         if (data.data) {
@@ -95,12 +90,14 @@ export default {
   },
   watch: {
     initDate: function (val) {
-        this.endDate = moment(val).endOf('month').toDate();
+      this.endDate = moment(val)
+        .endOf('month')
+        .toDate()
     }
   },
-  created() {
+  created () {
     if (!window.user) {
-      this.$router.push("/login")
+      this.$router.push('/login')
       return
     }
     this.getMirror()
