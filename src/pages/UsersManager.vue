@@ -113,7 +113,7 @@ export default {
     },
     save (user) {
       this.showForm = false
-      if (user._id && user !== this.selected[0]) {
+      if (user._id) {
         users.update(user)
       } else {
         // users.create(user)
