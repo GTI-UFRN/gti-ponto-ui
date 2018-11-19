@@ -130,6 +130,13 @@ export default {
     save () {
       this.$emit('onSave', this.user)
     }
+  },
+  watch: {
+    user: function () {
+      if (this.user.address.cep && this.user.address.cep !== '') {
+        this.getCep(this.user.address.cep)
+      }
+    }
   }
 }
 </script>

@@ -113,16 +113,18 @@ export default {
     },
     save (user) {
       this.showForm = false
+      if (user._id && user !== this.selected[0]) {
+        users.update(user)
+      } else {
+        // users.create(user)
+      }
     },
     showUserForm () {
       this.showForm = true
-      // if (this.user.address.cep && this.user.address.cep !== '') {
-      //   this.getCep(this.user.address.cep)
-      // }
     },
     async request () {
       try {
-        const { data } = await users.getAllUsers()
+        const { data } = await users.getAll()
         this.users = data.data
       } catch (error) {
         console.log(error)
