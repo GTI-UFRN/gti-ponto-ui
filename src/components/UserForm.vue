@@ -13,12 +13,17 @@
             <q-input v-model="user.email" float-label="Email"  />
           </q-field>
         </div>
-        <div class="col-xs-12 col-md-3">
+          <div class="col-xs-12 col-md-2">
+            <q-field>
+              <q-input v-model="user.phone" float-label="Fone"  />
+            </q-field>
+        </div>
+        <div class="col-xs-12 col-md-2">
           <q-field>
             <q-input v-model="user.registration" float-label="Matrícula"  />
           </q-field>
         </div>
-        <div class="col-xs-12 col-md-3">
+        <div class="col-xs-12 col-md-2">
           <q-field>
             <q-datetime v-model="user.birthday" format="DD/MM/YY" type="date" float-label="Nascimento"/>
           </q-field>
