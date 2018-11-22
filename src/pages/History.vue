@@ -8,13 +8,24 @@
       <q-btn @click="getMirror" color="green">Buscar</q-btn>
     </div>
     <br>
-    <q-table :title="'Resumo entre ' + formatDate(initDate) + ' - ' + formatDate(endDate) " no-data-label="Nenhum registro encontrado!" :data="mirror" :columns="columns" :pagination="{rowsPerPage: 25}" row-key="date" />
+    <q-table
+      :title="'Resumo entre ' + formatDate(initDate) + ' - ' + formatDate(endDate) "
+      no-data-label="Nenhum registro encontrado!"
+      :data="mirror"
+      :columns="columns"
+      :pagination="{rowsPerPage: 25}"
+      row-key="date">
+      <div slot="bottom" slot-scope="props" class="row text-black">
+        <mirro-resume :times="mirror" />
+      </div>
+    </q-table>
   </q-page>
 </template>
 
 <script>
 import moment from 'moment'
 import ponto from '../services/ponto'
+import MirroResume from '../components/MirroResume.vue'
 
 function getMonthDateRange () {
   const date = window.time
@@ -74,6 +85,9 @@ export default {
       ],
       mirror: []
     }
+  },
+  components: {
+    MirroResume
   },
   methods: {
     formatDate (d) {

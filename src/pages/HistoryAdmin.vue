@@ -9,7 +9,7 @@
     </div>
     <br>
     <q-table
-    :title="'Resumo entre ' + formatDate(initDate) + ' - ' + formatDate(endDate) "
+    :title="'Entre ' + formatDate(initDate) + ' - ' + formatDate(endDate) "
     no-data-label="Nenhum registro encontrado!"
     :data="mirror" :columns="columns"
     :pagination="{rowsPerPage: 25}"
@@ -23,6 +23,9 @@
         />
       </div>
     </div>
+    <div slot="bottom" slot-scope="props" class="row text-black">
+      <mirro-resume :times="mirror" />
+    </div>
     </q-table>
   </q-page>
 </template>
@@ -31,6 +34,7 @@
 import moment from 'moment'
 import ponto from '../services/ponto'
 import users from '../services/users'
+import MirroResume from '../components/MirroResume.vue'
 
 function getMonthDateRange () {
   const date = new Date()
@@ -92,6 +96,9 @@ export default {
       user: null,
       users: []
     }
+  },
+  components: {
+    MirroResume
   },
   methods: {
     formatDate (d) {
