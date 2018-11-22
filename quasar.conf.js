@@ -62,7 +62,9 @@ module.exports = function (ctx) {
         'QTable',
         'QDatetime',
         'QModal',
-        'QSelect'
+        'QSelect',
+        'QItemTile',
+        'QItemSeparator'
       ],
       directives: [
         'Ripple'

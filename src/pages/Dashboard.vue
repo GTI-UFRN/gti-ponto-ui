@@ -35,7 +35,7 @@
           <b> <i class="material-icons">note</i> Matrícula </b>{{userProfile.registration}} <br>
           <b> <i class="material-icons">mail</i> Email </b><a :href="`mailto:${userProfile.email}`">{{userProfile.email}}</a> <br>
           <b> <i class="material-icons">phone</i> Telefone </b> <a :href="`https://wa.me/+55${userProfile.phone}`" target="_blank">{{userProfile.phone}}</a> <br>
-          <b> <i class="material-icons text-green" >fiber_manual_record</i> Status </b>Ativo <br>
+          <b> <i class="material-icons text-green" >fiber_manual_record</i> Status </b> {{userProfile.active ? 'Ativo' : 'Inativo'}} <br>
         </p>
       </div>
     </q-modal>
