@@ -23,7 +23,8 @@ export default {
   props: ['times'],
   computed: {
     resume: function () {
-      return moment.utc(this.times.reduce((ac, at) => (ac + sumTime(at)), 0)).format('HH:mm')
+      const sum = this.times.reduce((ac, at) => (ac + sumTime(at)), 0)
+      return moment.duration(sum).asHours().toString().split('.')[0]
     }
   }
 }
