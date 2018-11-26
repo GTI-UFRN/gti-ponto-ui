@@ -1,8 +1,9 @@
 <template>
   <q-page class="flex flex-center column">
+    <img :src="user.photoURL" alt="Usuario" class="img-profile">
     <span class="day">{{this.day}}.</span>
     <span class="clock">{{this.time}}</span>
-    <p>Usuário, {{user.name}}</p>
+    <p>Usuário, <b>{{displayName}}</b></p>
     <p v-if="openTime._id">Tempo de trabalho: {{this.workTime}}</p>
     <q-btn @click="checkin" v-if="isCheckin" color="green" size="lg">
       Entrada
@@ -22,16 +23,6 @@ moment.locale('pt-BR')
 
 export default {
   name: 'PageIndex',
-  data () {
-    return {
-      time: '',
-      workTime: '',
-      user: {},
-      isCheckin: true,
-      openTime: {},
-      day: moment().format('ddd DD MMM')
-    }
-  },
   methods: {
     checkin () {
       ponto
@@ -75,6 +66,22 @@ export default {
       }, 10000)
     }
   },
+  computed: {
+    displayName () {
+      const name = this.user.name.split(' ')
+      return `${name[0]} ${name[1]}`
+    }
+  },
+  data () {
+    return {
+      time: '',
+      workTime: '',
+      user: {},
+      isCheckin: true,
+      openTime: {},
+      day: moment().format('ddd DD MMM')
+    }
+  },
   created () {
     if (!window.user) {
       this.$router.push('/login')
@@ -114,5 +121,11 @@ export default {
 }
 .day {
   font-size: 48px;
+}
+
+.img-profile {
+  border-radius: 100%;
+  width: 120px;
+  height: 120px;
 }
 </style>
