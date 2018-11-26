@@ -28,6 +28,11 @@
             <q-datetime v-model="user.birthday" format="DD/MM/YY" type="date" float-label="Nascimento"/>
           </q-field>
         </div>
+        <div class="col-xs-12 col-md-12">
+          <q-field>
+            <q-uploader name="profile" url="" :upload-factory="uploadFile" />
+          </q-field>
+        </div>
       </div>
       <h1 class="q-headline">Dados bancários</h1>
       <div class="row gutter-sm">
@@ -111,6 +116,8 @@
 </template>
 
 <script>
+import users from '../services/users'
+
 export default {
   name: 'UserForm',
   props: ['user'],
@@ -131,6 +138,14 @@ export default {
         .then(r => {
           this.address = r
         })
+    },
+    uploadFile (file, updateProgress) {
+      users.setImageProfile(this.user, file).then((r) => {
+        console.log('sds')
+        console.log(r)
+      }).catch(e => {
+        console.log(e)
+      })
     },
     save () {
       this.$emit('onSave', this.user)

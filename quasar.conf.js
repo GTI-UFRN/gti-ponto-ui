@@ -64,7 +64,8 @@ module.exports = function (ctx) {
         'QModal',
         'QSelect',
         'QItemTile',
-        'QItemSeparator'
+        'QItemSeparator',
+        'QUploader'
       ],
       directives: [
         'Ripple'
