@@ -5,10 +5,10 @@
         <h1 class="q-headline">Resumo</h1>
         <q-list highlight>
           <q-list-header>Bolsistas</q-list-header>
-          <q-item v-for="(user, index) in users" :key="user._id" separator>
+          <q-item v-for="user in users" :key="user._id" separator>
             <q-item-side>
               <q-item-tile avatar>
-                <img :src="`https://randomuser.me/api/portraits/women/${index+60}.jpg`">
+                <img :src="user.photoURL">
               </q-item-tile>
             </q-item-side>
             <q-item-main>
@@ -28,7 +28,7 @@
     </div>
     <q-modal v-model="showProfile">
       <div class="column flex-center user-profile">
-        <img class="profile-img" :src="`https://avatars2.githubusercontent.com/u/12974798?s=460&v=4`">
+        <img class="profile-img" :src="userProfile.photoURL">
         <br>
         <p class="user-info">
           <b> <i class="material-icons">account_circle</i> {{userProfile.name}}</b> <br>
