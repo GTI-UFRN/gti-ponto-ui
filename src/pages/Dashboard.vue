@@ -8,7 +8,7 @@
           <q-item v-for="user in users" :key="user._id" separator>
             <q-item-side>
               <q-item-tile avatar>
-                <img :src="user.photoURL">
+                <img :src="user.photoURL || 'https://png.pngtree.com/svg/20161212/personal_default_avatar_for_mobile_phone_app__146524.png'">
               </q-item-tile>
             </q-item-side>
             <q-item-main>
@@ -28,7 +28,7 @@
     </div>
     <q-modal v-model="showProfile">
       <div class="column flex-center user-profile">
-        <img class="profile-img" :src="userProfile.photoURL">
+        <img class="profile-img" :src="userProfile.photoURL || 'https://png.pngtree.com/svg/20161212/personal_default_avatar_for_mobile_phone_app__146524.png'">
         <br>
         <p class="user-info">
           <b> <i class="material-icons">account_circle</i> {{userProfile.name}}</b> <br>
