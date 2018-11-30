@@ -1,16 +1,21 @@
 <template>
   <q-page class="flex flex-center column">
-    <img :src="user.photoURL" alt="Usuario" class="img-profile">
+    <img :src="user.photoURL  || 'https://png.pngtree.com/svg/20161212/personal_default_avatar_for_mobile_phone_app__146524.png'" alt="Usuario" class="img-profile">
     <span class="day">{{this.day}}.</span>
     <span class="clock">{{this.time}}</span>
     <p>Usuário, <b>{{displayName}}</b></p>
-    <p v-if="openTime._id">Tempo de trabalho: {{this.workTime}}</p>
-    <q-btn @click="checkin" v-if="isCheckin" color="green" size="lg">
-      Entrada
-    </q-btn>
-    <q-btn @click="checkout" v-else color="red" size="lg">
-      Saída
-    </q-btn>
+    <p v-if="openTime._id && !blocked">Tempo de trabalho: {{this.workTime}}</p>
+    <div v-if="!blocked">
+      <q-btn @click="checkin" v-if="isCheckin" color="green" size="lg">
+        Entrada
+      </q-btn>
+      <q-btn @click="checkout" v-else color="red" size="lg">
+        Saída
+      </q-btn>
+    </div>
+    <div class="alert text-red" v-else>
+      <p>Olá Querido! {{msgText}} :) Você esqueceu de bater o ponto!!! Entre em contato com o Coordenador do setor para liberar novamente. Beijos, queridos.</p>
+    </div>
   </q-page>
 </template>
 
@@ -20,6 +25,8 @@ import auth from '../services/auth'
 import ponto from '../services/ponto'
 
 moment.locale('pt-BR')
+
+const isOtherDay = (dateCheckin, dateServer) => dateCheckin.getDate() !== dateServer.getDate()
 
 export default {
   name: 'PageIndex',
@@ -56,6 +63,7 @@ export default {
         } else {
           this.isCheckin = false
           this.openTime = data.data
+          if (isOtherDay(new Date(this.openTime.date), window.time)) this.blocked = true
         }
       })
     },
@@ -69,15 +77,19 @@ export default {
   computed: {
     displayName () {
       const name = this.user.name.split(' ')
-      return `${name[0]} ${name[1]}`
+      return name.length > 1 ? `${name[0]} ${name[1]}` : name[0]
+    },
+    msgText () {
+      return window.time.getHours() < 12 ? 'Bom dia' : 'Boa tarde'
     }
   },
   data () {
     return {
       time: '',
       workTime: '',
-      user: {},
+      user: { name: '' },
       isCheckin: true,
+      blocked: false,
       openTime: {},
       day: moment().format('ddd DD MMM')
     }
@@ -119,6 +131,7 @@ export default {
 .clock {
   font-size: 58px;
 }
+
 .day {
   font-size: 48px;
 }
@@ -127,5 +140,9 @@ export default {
   border-radius: 100%;
   width: 120px;
   height: 120px;
+}
+
+.alert{
+  padding: 16px;
 }
 </style>
