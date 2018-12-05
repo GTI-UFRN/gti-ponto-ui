@@ -16,7 +16,7 @@
                 <a @click="showModal(user)">{{user.name}}</a>
               </q-item-tile>
               <q-item-tile sublabel>
-                <b>Chamados Abertos</b> 2 <br>
+                <b>Chamados Abertos</b> {{ getCountOpenedOfOccurrences(user) }} <br>
               </q-item-tile>
             </q-item-main>
             <q-item-side right>
@@ -44,6 +44,7 @@
 
 <script>
 import users from '../services/users'
+import ocomon from '../services/ocomon'
 
 export default {
   methods: {
@@ -58,17 +59,25 @@ export default {
     showModal (user) {
       this.showProfile = true
       this.userProfile = user
+    },
+    getCountOpenedOfOccurrences (user) {
+      const ocomon = this.occurrences.find(o => o.user_id === user.ocomonId)
+      return ocomon ? ocomon.ocorrenciasEmAberto.length : 0
     }
   },
   data () {
     return {
       users: [],
+      occurrences: [],
       userProfile: {},
       showProfile: false
     }
   },
   created () {
     this.request()
+    ocomon.getAllOpenOccurrences().then(({ data }) => {
+      this.occurrences = data.data.users
+    })
   }
 }
 </script>

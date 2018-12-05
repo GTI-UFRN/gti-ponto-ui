@@ -30,7 +30,7 @@
         </div>
         <div class="col-xs-12 col-md-12">
           <q-field>
-            <q-uploader name="profile" url="" :upload-factory="uploadFile" />
+            <q-uploader v-model="file" name="profile" url="" :upload-factory="uploadFile" float-label="Foto do perfil" />
           </q-field>
         </div>
       </div>
@@ -82,9 +82,14 @@
               />
           </q-field>
         </div>
+        <div class="col-xs-12 col-md-3">
+          <q-field>
+            <q-input v-model="user.ocomonId" float-label="Id do ocomon"/>
+          </q-field>
+        </div>
         <div class="col-xs-12 col-md-12">
           <q-field>
-            <q-input v-model="user.operation" float-label="Observação"/>
+            <q-input v-model="user.obs" float-label="Observação"/>
           </q-field>
         </div>
       </div>
@@ -124,6 +129,7 @@ export default {
   data () {
     return {
       address: {},
+      file: null,
       banks: [
         { value: '001', label: '001 - BANCO DO BRASIL S/A' },
         { value: '104', label: '104 - CAIXA ECONOMICA FEDERAL' }
@@ -140,9 +146,9 @@ export default {
         })
     },
     uploadFile (file, updateProgress) {
+      delete this.user.photoURL
       users.setImageProfile(this.user, file).then((r) => {
-        console.log('sds')
-        console.log(r)
+        file = null
       }).catch(e => {
         console.log(e)
       })
