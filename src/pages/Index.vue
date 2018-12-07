@@ -95,26 +95,22 @@ export default {
     }
   },
   created () {
-    if (!window.user) {
-      this.$router.push('/login')
-    } else {
-      user.rules.includes('admin') ? this.$router.push('/dashborad') : this.$router.push('/')
-      clearInterval(window.clock1)
-      clearInterval(window.clock2)
-      auth.getUser(window.user._id).then(({ data }) => {
-        this.user = data.data
-      })
-      ponto.getServerTime().then((time) => {
-        window.time = new Date(time)
-        window.time.setMilliseconds(window.time.getMilliseconds() + 1000)
-        window.clock1 = setInterval(() => {
-          if (window.time) {
-            window.time.setMilliseconds(window.time.getMilliseconds() + 1000)
-          }
-        }, 1000)
-      })
-      this.updateStatus()
-    }
+    user.rules.includes('admin') ? this.$router.push('/dashborad') : this.$router.push('/')
+    clearInterval(window.clock1)
+    clearInterval(window.clock2)
+    auth.getUser(window.user._id).then(({ data }) => {
+      this.user = data.data
+    })
+    ponto.getServerTime().then((time) => {
+      window.time = new Date(time)
+      window.time.setMilliseconds(window.time.getMilliseconds() + 1000)
+      window.clock1 = setInterval(() => {
+        if (window.time) {
+          window.time.setMilliseconds(window.time.getMilliseconds() + 1000)
+        }
+      }, 1000)
+    })
+    this.updateStatus()
     window.clock2 = setInterval(() => {
       if (this.openTime._id && window.time) {
         const wt = moment.duration(window.time - new Date(this.openTime.checkin))

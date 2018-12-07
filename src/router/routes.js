@@ -1,4 +1,14 @@
 
+function requireAuth (to, from, next) {
+  if (!window.user) {
+    next({
+      path: '/login'
+    })
+  } else {
+    next()
+  }
+}
+
 const routes = [
   {
     path: '/',
@@ -9,7 +19,8 @@ const routes = [
       { path: 'dashborad', component: () => import('pages/Dashboard.vue') },
       { path: 'history-admin', component: () => import('pages/HistoryAdmin.vue') },
       { path: 'users', component: () => import('pages/UsersManager.vue') }
-    ]
+    ],
+    beforeEnter: requireAuth
   },
   {
     path: '/login',

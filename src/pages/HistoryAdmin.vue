@@ -139,10 +139,6 @@ export default {
     }
   },
   created () {
-    if (!window.user) {
-      this.$router.push('/login')
-      return
-    }
     this.request()
   }
 }
