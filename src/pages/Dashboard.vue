@@ -20,7 +20,7 @@
               </q-item-tile>
             </q-item-main>
             <q-item-side right>
-              <q-item-tile icon="fiber_manual_record" color="green" />
+              <q-item-tile icon="fiber_manual_record" :color="getUserStatus(user)" />
             </q-item-side>
           </q-item>
         </q-list>
@@ -45,6 +45,7 @@
 <script>
 import users from '../services/users'
 import ocomon from '../services/ocomon'
+import ponto from '../services/ponto'
 
 export default {
   methods: {
@@ -60,8 +61,13 @@ export default {
       this.showProfile = true
       this.userProfile = user
     },
-    getCountOpenedOfOccurrences (user) {
-      const ocomon = this.occurrences.find(o => o.user_id === user.ocomonId)
+    getUserStatus ({ _id }) {
+      const id = this.times.find(t => t.userId === _id)
+      return id ? 'green' : 'red'
+    },
+    getCountOpenedOfOccurrences ({ ocomonId = null }) {
+      if (!ocomonId) return 'Ocomon não vinculado'
+      const ocomon = this.occurrences.find(o => o.user_id === ocomonId)
       return ocomon ? ocomon.ocorrenciasEmAberto.length : 0
     }
   },
@@ -69,6 +75,7 @@ export default {
     return {
       users: [],
       occurrences: [],
+      times: [],
       userProfile: {},
       showProfile: false
     }
@@ -77,6 +84,9 @@ export default {
     this.request()
     ocomon.getAllOpenOccurrences().then(({ data }) => {
       this.occurrences = data.data.users
+    })
+    ponto.getTimes({ checkout: false }).then(({ data }) => {
+      this.times = data.data
     })
   }
 }

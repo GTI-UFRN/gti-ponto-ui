@@ -4,6 +4,9 @@ const api = {
   getUserStatus (userId) {
     return instance.get('/ponto/times/' + userId)
   },
+  getTimes (filters) {
+    return instance.get('/ponto/times?checkout=' + filters.checkout)
+  },
   checkin (userId) {
     return instance.post('/ponto/times/checkin', {
       userId

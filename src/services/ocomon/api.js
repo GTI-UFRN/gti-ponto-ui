@@ -3,7 +3,7 @@ import instance from '../auth/instace'
 const api = {
   getAllOpenOccurrences () {
     return instance({
-      url: 'http://localhost:4000/',
+      url: '/ocomon',
       method: 'post',
       data: {
         query: `
