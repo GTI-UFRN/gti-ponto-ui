@@ -1,14 +1,20 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import moment from 'moment'
 
 import routes from './routes'
 
 Vue.use(VueRouter)
 
-/*
- * If not building with SSR mode, you can
- * directly export the Router instantiation
- */
+Vue.filter('time', function (time) {
+  if (!time) return ''
+  return moment.utc(time.asMilliseconds()).format('HH:mm:ss')
+})
+
+Vue.filter('date', function (time) {
+  if (!time) return ''
+  return moment.utc(new Date(time)).format('DD/MM/YY')
+})
 
 export default function (/* { store, ssrContext } */) {
   const Router = new VueRouter({

@@ -13,8 +13,22 @@
         Saída
       </q-btn>
     </div>
-    <div class="alert text-red" v-else>
-      <p>Olá Querido! {{msgText}} :) Você esqueceu de bater o ponto!!! Entre em contato com o Coordenador do setor para liberar novamente. Beijos, queridos.</p>
+    <div class="q-pa-sm" v-else>
+      <p class="alert text-red">Olá Querido! {{msgText}} :) Você esqueceu de bater o ponto de saída em {{this.openTime.checkin | date}}!!! Envie uma justificativa para liberar seu ponto. Beijos, queridos.</p>
+      <div class="row justify-end gutter-sm">
+        <div class="col-12">
+          <q-field>
+          <q-input v-model="justification" float-label="Justificativa" />
+        </q-field>
+        </div>
+        <div class="col-12">
+          Hora da saida:
+          <q-datetime-picker v-model="exitAt" type="time"/>
+        </div>
+        <div class="col-auto">
+          <q-btn color="green">Enviar</q-btn>
+        </div>
+      </div>
     </div>
   </q-page>
 </template>
@@ -91,7 +105,10 @@ export default {
       isCheckin: true,
       blocked: false,
       openTime: {},
-      day: moment().format('ddd DD MMM')
+      day: moment().format('ddd DD MMM'),
+      exitAt: '',
+      justification: ''
+
     }
   },
   created () {

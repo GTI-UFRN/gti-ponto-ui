@@ -17,6 +17,13 @@ const api = {
       _id
     })
   },
+  justificationCheckout (_id, justification, exiatAt) {
+    return instance.post('/ponto/times/checkout', {
+      _id,
+      justification,
+      exiatAt
+    })
+  },
   getMirror (userId, range) {
     return instance.get(`/ponto/times/mirror/${userId}/${9}`, {
       params: {

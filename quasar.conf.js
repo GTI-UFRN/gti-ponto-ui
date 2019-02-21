@@ -65,7 +65,8 @@ module.exports = function (ctx) {
         'QSelect',
         'QItemTile',
         'QItemSeparator',
-        'QUploader'
+        'QUploader',
+        'QDatetimePicker'
       ],
       directives: [
         'Ripple'

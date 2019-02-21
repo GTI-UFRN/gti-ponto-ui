@@ -42,9 +42,9 @@ export default {
       const { username, password } = this
       auth.getToken(username, password)
         .then((user) => {
+          window.user = user
           user.rules.includes('admin') ? this.$router.push('/dashborad') : this.$router.push('/')
           this.username = this.password = ''
-          window.user = user
         })
         .catch((e) => {
           alert('Login ou senha inválido!')
