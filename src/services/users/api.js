@@ -22,7 +22,7 @@ function setImageProfile (user, file) {
 }
 
 function create (user) {
-  return instance.post('/users', user)
+  return instance.post('/users/register', user)
 }
 
 export default { create, getAll, update, setImageProfile }

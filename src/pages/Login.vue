@@ -18,24 +18,37 @@
             <q-btn type="submit" rounded icon="check_circle" color="primary" label="Entrar" class="full-width" />
             <p></p>
             <div class="flex flex-center ">
-              <p>Não tem uma conta? <a href="">Cadastre-se.</a></p>
+              <p>Não tem uma conta? <q-btn flat @click="showForm = true">Cadastre-se.</q-btn></p>
             </div>
           </form>
         </q-card-main>
       </q-card>
     </q-page>
+    <q-modal v-model="showForm">
+      <user-form @onSave="save" :user="user" :register="true" />
+    </q-modal>
   </q-layout>
 </template>
 
 <script>
 import auth from '../services/auth'
+import users from '../services/users'
+import UserForm from '../components/UserForm'
 
 export default {
   data () {
     return {
       username: '',
-      password: ''
+      password: '',
+      showForm: false,
+      user: {
+        address: {},
+        bankAccount: {}
+      }
     }
+  },
+  components: {
+    UserForm
   },
   methods: {
     login () {
@@ -48,6 +61,19 @@ export default {
         })
         .catch((e) => {
           alert('Login ou senha inválido!')
+        })
+    },
+    save (user) {
+      users.create(user)
+        .then((result) => {
+          alert('Usuário cadastrado com sucesso!')
+          this.showForm = false
+          this.user = {
+            address: {},
+            bankAccount: {}
+          }
+        }).catch(err => {
+          alert('Erro ao criar usuário:', err)
         })
     }
   }

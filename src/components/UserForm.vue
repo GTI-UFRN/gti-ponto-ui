@@ -1,31 +1,41 @@
 <template>
   <div style="padding: 16px">
-    <h1 class="q-headline">Dados básicos</h1>
+    <h1 class="q-headline">Dados básicos {{register + 'as'}}</h1>
     <form @submit.prevent="save">
       <div class="row gutter-sm">
         <div class="col-xs-12 col-md-3">
           <q-field>
-            <q-input v-model="user.name" float-label="Nome"  />
+            <q-input v-model="user.name" float-label="Nome" required />
           </q-field>
         </div>
         <div class="col-xs-12 col-md-3">
           <q-field>
-            <q-input v-model="user.email" float-label="Email"  />
+            <q-input v-model="user.email" float-label="Email" required />
           </q-field>
         </div>
-          <div class="col-xs-12 col-md-2">
+        <div v-if="register" class="col-xs-12 col-md-3">
+          <q-field>
+            <q-input v-model="user.username" float-label="Usuário" required />
+          </q-field>
+        </div>
+        <div v-if="register" class="col-xs-12 col-md-3">
+          <q-field>
+            <q-input v-model="user.password" float-label="Senha" type="password" required />
+          </q-field>
+        </div>
+        <div class="col-xs-12 col-md-2">
             <q-field>
-              <q-input v-model="user.phone" float-label="Fone"  />
+              <q-input v-model="user.phone" float-label="Fone" required />
             </q-field>
         </div>
         <div class="col-xs-12 col-md-2">
           <q-field>
-            <q-input v-model="user.registration" float-label="Matrícula"  />
+            <q-input v-model="user.registration" float-label="Matrícula" required />
           </q-field>
         </div>
         <div class="col-xs-12 col-md-2">
           <q-field>
-            <q-datetime v-model="user.birthday" format="DD/MM/YY" type="date" float-label="Nascimento"/>
+            <q-datetime v-model="user.birthday" format="DD/MM/YY" type="date" float-label="Nascimento" required />
           </q-field>
         </div>
         <div class="col-xs-12 col-md-12">
@@ -34,36 +44,19 @@
           </q-field>
         </div>
       </div>
-      <h1 class="q-headline">Dados bancários</h1>
+      <h1 class="q-headline">Dados da bolsa</h1>
       <div class="row gutter-sm">
-        <div class="col-xs-12 col-md-3">
-          <q-field>
-            <q-input v-model="user.bankAccount.agency" float-label="Agência"  />
-          </q-field>
-        </div>
-        <div class="col-xs-12 col-md-3">
-          <q-field>
-            <q-input v-model="user.bankAccount.account" float-label="Conta"  />
-          </q-field>
-        </div>
         <div class="col-xs-12 col-md-3">
           <q-field>
             <q-select
-              v-model="user.bankAccount.bank"
-              float-label="Status"
-              radio
-              :options="banks"
+              v-model="user.type"
+              float-label="Tipo" radio :options="[{value: 'bolsista', label: 'Bolsista'}, {value: 'estagiario', label: 'Estágiario'}]"
+              required
               />
           </q-field>
         </div>
-        <div class="col-xs-12 col-md-3">
-          <q-field>
-            <q-input v-model="user.bankAccount.operation" float-label="Operação"/>
-          </q-field>
-        </div>
       </div>
-      <h1 class="q-headline">Dados da bolsa</h1>
-      <div class="row gutter-sm">
+      <div v-if="!register" class="row gutter-sm">
         <div class="col-xs-12 col-md-3">
           <q-field>
             <q-datetime v-model="user.createdAt" float-label="Data Entrada"  />
@@ -93,16 +86,46 @@
           </q-field>
         </div>
       </div>
+      <div v-show="user.type == 'bolsista'">
+        <h1 class="q-headline">Dados bancários</h1>
+        <div class="row gutter-sm">
+          <div class="col-xs-12 col-md-3">
+            <q-field>
+              <q-input v-model="user.bankAccount.agency" float-label="Agência"  />
+            </q-field>
+          </div>
+          <div class="col-xs-12 col-md-3">
+            <q-field>
+              <q-input v-model="user.bankAccount.account" float-label="Conta"  />
+            </q-field>
+          </div>
+          <div class="col-xs-12 col-md-3">
+            <q-field>
+              <q-select
+                v-model="user.bankAccount.bank"
+                float-label="Banco"
+                radio
+                :options="banks"
+                />
+            </q-field>
+          </div>
+          <div class="col-xs-12 col-md-3">
+            <q-field>
+              <q-input v-model="user.bankAccount.operation" float-label="Operação"/>
+            </q-field>
+          </div>
+        </div>
+      </div>
       <h1 class="q-headline">Dados de endereço</h1>
       <div class="row gutter-sm">
         <div class="col-xs-12 col-md-3">
           <q-field>
-            <q-input v-model="user.address.cep" float-label="Cep"  />
+            <q-input v-model="user.address.cep" float-label="Cep" />
           </q-field>
         </div>
         <div class="col-xs-12 col-md-3">
           <q-field>
-            <q-input v-model="user.address.number" float-label="Número"  />
+            <q-input v-model="user.address.number" float-label="Número" />
           </q-field>
         </div>
         <div class="col-12">
@@ -125,7 +148,7 @@ import users from '../services/users'
 
 export default {
   name: 'UserForm',
-  props: ['user'],
+  props: ['user', 'register'],
   data () {
     return {
       address: {},

@@ -22,7 +22,7 @@
       <div class="col" />
     </template>
   </q-table>
-  <q-modal v-model="showForm" maximized>
+  <q-modal v-model="showForm">
     <user-form @onSave="save" :user="user" />
   </q-modal>
   </q-page>
