@@ -1,6 +1,6 @@
 <template>
   <div style="padding: 16px">
-    <h1 class="q-headline">Dados básicos {{register + 'as'}}</h1>
+    <h1 class="q-headline">Dados básicos</h1>
     <form @submit.prevent="save">
       <div class="row gutter-sm">
         <div class="col-xs-12 col-md-3">
