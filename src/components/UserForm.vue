@@ -59,7 +59,7 @@
       <div v-if="!register" class="row gutter-sm">
         <div class="col-xs-12 col-md-3">
           <q-field>
-            <q-datetime v-model="user.createdAt" float-label="Data Entrada"  />
+            <q-datetime v-model="user.entryAt" float-label="Data Entrada"  />
           </q-field>
         </div>
         <div class="col-xs-12 col-md-3">
