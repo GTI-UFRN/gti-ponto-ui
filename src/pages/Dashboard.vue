@@ -51,7 +51,7 @@ export default {
   methods: {
     async request () {
       try {
-        const { data } = await users.getAll()
+        const { data } = await users.getActived()
         this.users = data.data
       } catch (error) {
         console.log(error)

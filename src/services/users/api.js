@@ -4,6 +4,10 @@ function getAll () {
   return instance.get('/users')
 }
 
+function getActived () {
+  return instance.get('/users?active=true')
+}
+
 function update (user) {
   return instance.put(`/users/${user._id}`, user)
 }
@@ -25,4 +29,4 @@ function create (user) {
   return instance.post('/users/register', user)
 }
 
-export default { create, getAll, update, setImageProfile }
+export default { create, getAll, getActived, update, setImageProfile }
