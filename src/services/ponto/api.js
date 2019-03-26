@@ -17,6 +17,9 @@ const api = {
       _id
     })
   },
+  create (time) {
+    return instance.post('/ponto/times/', time)
+  },
   justificationCheckout (_id, justification, exiatAt) {
     return instance.post('/ponto/times/checkout', {
       _id,

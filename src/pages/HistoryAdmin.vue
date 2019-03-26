@@ -9,11 +9,17 @@
     </div>
     <br>
     <q-table
-    :title="'Entre ' + formatDate(initDate) + ' - ' + formatDate(endDate) "
     no-data-label="Nenhum registro encontrado!"
     :data="mirror" :columns="columns"
     :pagination="{rowsPerPage: 25}"
     row-key="date">
+    <div slot="top-left" slot-scope="props" class="row align-items-center">
+      <div>
+        <q-btn @click="modalTime = true" icon="note_add" color="blue">
+          Adicionar registro
+        </q-btn>
+      </div>
+    </div>
     <div slot="top-right" slot-scope="props" class="flex">
       <div class="user__select">
         <q-select
@@ -27,6 +33,35 @@
       <mirro-resume :times="mirror" />
     </div>
     </q-table>
+    <q-modal v-model="modalTime" minimized>
+      <div style="padding: 20px; max-width: 600px">
+      <div class="q-display-1 q-mb-md">Formulário de ponto</div>
+        <form @submit.prevent="saveTime">
+          <div class="row gutter-sm">
+            <div class="col-md-12">
+              <q-field>
+                <q-datetime v-model="time.date" float-label="Data Entrada" required />
+              </q-field>
+            </div>
+            <div class="col-md-6">
+              <label>Entrada</label>
+              <q-field>
+                <q-input v-model="time.checkin" label="Entrada" type="time" required />
+              </q-field>
+            </div>
+            <div class="col-md-6">
+              <label>Saída</label>
+              <q-field>
+                <q-input v-model="time.checkout" label="Saida" type="time" required />
+              </q-field>
+            </div>
+            <div class="col-md-6">
+              <q-btn type="submit" color="green">Salvar</q-btn>
+            </div>
+          </div>
+        </form>
+      </div>
+    </q-modal>
   </q-page>
 </template>
 
@@ -53,6 +88,8 @@ export default {
   name: 'HistoryView',
   data () {
     return {
+      modalTime: false,
+      time: {},
       initDate: mothRange.start,
       endDate: mothRange.end,
       columns: [
@@ -121,6 +158,35 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    saveTime () {
+      const date = new Date(this.time.date)
+      const checkinTime = this.time.checkin.split(':')
+      const checkoutTime = this.time.checkout.split(':')
+
+      const checkin = new Date(this.time.date)
+      const checkout = new Date(this.time.date)
+
+      checkin.setHours(checkinTime[0])
+      checkin.setMinutes(checkinTime[1])
+
+      checkout.setHours(checkoutTime[0])
+      checkout.setMinutes(checkoutTime[1])
+
+      const newTime = {
+        userId: this.user,
+        date,
+        checkin,
+        checkout
+      }
+
+      ponto.create(newTime)
+        .then(result => {
+          alert('Novo registro adicionada!')
+          this.modalTime = false
+          this.time = {}
+          this.getMirror(this.user)
+        })
     }
   },
   computed: {
