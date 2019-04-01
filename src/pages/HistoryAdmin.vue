@@ -12,6 +12,8 @@
     no-data-label="Nenhum registro encontrado!"
     :data="mirror" :columns="columns"
     :pagination="{rowsPerPage: 25}"
+    selection="single"
+    :selected.sync="selected"
     row-key="date">
     <div slot="top-left" slot-scope="props" class="row align-items-center">
       <div>
@@ -20,6 +22,10 @@
         </q-btn>
       </div>
     </div>
+    <template slot="top-selection" slot-scope="props">
+      <q-btn @click="editTime" color="primary" flat label="Editar" class="q-mr-sm" />
+      <div class="col" />
+    </template>
     <div slot="top-right" slot-scope="props" class="flex">
       <div class="user__select">
         <q-select
@@ -89,6 +95,7 @@ export default {
   data () {
     return {
       modalTime: false,
+      selected: [],
       time: {},
       initDate: mothRange.start,
       endDate: mothRange.end,
@@ -138,6 +145,12 @@ export default {
     MirroResume
   },
   methods: {
+    editTime () {
+      this.time = this.selected[0]
+      this.time.checkin = moment(this.time.checkin).format('hh:mm')
+      this.time.checkout = moment(this.time.checkout).format('hh:mm')
+      this.modalTime = true
+    },
     formatDate (d) {
       return moment(d).format('DD/MM/Y')
     },
@@ -173,16 +186,18 @@ export default {
       checkout.setHours(checkoutTime[0])
       checkout.setMinutes(checkoutTime[1])
 
-      const newTime = {
+      let newTime = {
         userId: this.user,
         date,
         checkin,
         checkout
       }
-
-      ponto.create(newTime)
+      if (this.time._id) {
+        newTime._id = this.time._id
+      }
+      ponto.save(newTime)
         .then(result => {
-          alert('Novo registro adicionada!')
+          alert('Dados gravados!')
           this.modalTime = false
           this.time = {}
           this.getMirror(this.user)

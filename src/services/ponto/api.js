@@ -17,8 +17,12 @@ const api = {
       _id
     })
   },
-  create (time) {
-    return instance.post('/ponto/times/', time)
+  save (time) {
+    if (time._id) {
+      return instance.patch('/ponto/times/', time)
+    } else {
+      return instance.post('/ponto/times/', time)
+    }
   },
   justificationCheckout (_id, justification, exiatAt) {
     return instance.post('/ponto/times/checkout', {
