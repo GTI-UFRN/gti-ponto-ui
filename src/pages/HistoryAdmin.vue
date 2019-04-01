@@ -164,7 +164,7 @@ export default {
     },
     async request () {
       try {
-        const { data } = await users.getAll()
+        const { data } = await users.getActived()
         this.users = data.data
         this.user = this.users[0]._id
         this.getMirror(this.user)
