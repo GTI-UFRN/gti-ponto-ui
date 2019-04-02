@@ -13,7 +13,7 @@
         Saída
       </q-btn>
     </div>
-    <div class="q-pa-sm" v-else>
+    <form @submit.prevent="justify" class="q-pa-sm" v-else>
       <p class="alert text-red">Olá Querido! {{msgText}} :) Você esqueceu de bater o ponto de saída em {{this.openTime.checkin | date}}!!! Envie uma justificativa para liberar seu ponto. Beijos, queridos.</p>
       <div class="row justify-end gutter-sm">
         <div class="col-12">
@@ -23,13 +23,13 @@
         </div>
         <div class="col-12">
           Hora da saida:
-          <q-datetime-picker v-model="exitAt" type="time"/>
+          <q-input v-model="exitAt" type="time"/>
         </div>
         <div class="col-auto">
-          <q-btn color="green">Enviar</q-btn>
+          <q-btn type="submit" color="green">Enviar</q-btn>
         </div>
       </div>
-    </div>
+    </form>
   </q-page>
 </template>
 
@@ -80,6 +80,20 @@ export default {
           if (isOtherDay(new Date(this.openTime.date), window.time)) this.blocked = true
         }
       })
+    },
+    async justify () {
+      const checkoutDate = new Date(this.openTime.date)
+      const checkoutTime = this.exitAt.split(':')
+      checkoutDate.setHours(checkoutTime[0])
+      checkoutDate.setMinutes(checkoutTime[1])
+      try {
+        await ponto.justifiedCheckout(this.openTime._id, this.justification, checkoutDate)
+        alert('Justificativa enviada!')
+        this.blocked = false
+        this.updateStatus()
+      } catch (error) {
+        alert('Error na comunicação com servidor!')
+      }
     },
     logout () {
       setTimeout(() => {

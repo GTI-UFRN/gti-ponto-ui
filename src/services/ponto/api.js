@@ -24,11 +24,11 @@ const api = {
       return instance.post('/ponto/times/', time)
     }
   },
-  justificationCheckout (_id, justification, exiatAt) {
+  justifiedCheckout (_id, justification, exitAt) {
     return instance.post('/ponto/times/checkout', {
       _id,
       justification,
-      exiatAt
+      exitAt
     })
   },
   getMirror (userId, range) {
