@@ -5,7 +5,7 @@
       <q-datetime v-model="initDate" format="DD/MM/YY" type="date" float-label="Data inicial" />
       <q-datetime v-model="endDate" format="DD/MM/YY" type="date" float-label="Data final" />
       <br>
-      <q-btn @click="getMirror" color="green">Buscar</q-btn>
+      <q-btn @click="getMirror(user)" color="green">Buscar</q-btn>
     </div>
     <br>
     <q-table
