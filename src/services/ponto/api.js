@@ -7,6 +7,9 @@ const api = {
   getTimes (filters) {
     return instance.get('/ponto/times?checkout=' + filters.checkout)
   },
+  getPendingTimes () {
+    return instance.get('/ponto/times?pending=true')
+  },
   checkin (userId) {
     return instance.post('/ponto/times/checkin', {
       userId

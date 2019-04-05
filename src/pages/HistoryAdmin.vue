@@ -8,37 +8,64 @@
       <q-btn @click="getMirror(user)" color="green">Buscar</q-btn>
     </div>
     <br>
-    <q-table
-    no-data-label="Nenhum registro encontrado!"
-    :data="mirror" :columns="columns"
-    :pagination="{rowsPerPage: 25}"
-    selection="single"
-    :selected.sync="selected"
-    row-key="date">
-    <div slot="top-left" slot-scope="props" class="row align-items-center">
-      <div>
-        <q-btn @click="modalTime = true" icon="note_add" color="blue">
-          Adicionar registro
-        </q-btn>
-      </div>
-    </div>
-    <template slot="top-selection" slot-scope="props">
-      <q-btn @click="editTime" color="primary" flat label="Editar" class="q-mr-sm" />
-      <div class="col" />
-    </template>
-    <div slot="top-right" slot-scope="props" class="flex">
-      <div class="user__select">
-        <q-select
-        v-model="user"
-        float-label="Bolsista"
-        radio :options="usersList"
-        />
-      </div>
-    </div>
-    <div slot="bottom" slot-scope="props" class="row text-black">
-      <mirro-resume :times="mirror" />
-    </div>
-    </q-table>
+    <q-tabs color="blue">
+      <q-tab label="Resumo" default  slot="title" name="tab-1" icon="assignment" />
+      <q-tab label="Pendentes" :count="pendingTimes.length" slot="title" name="tab-2" icon="error_outline" />
+
+      <q-tab-pane name="tab-1">
+        <q-table
+          no-data-label="Nenhum registro encontrado!"
+          :data="mirror" :columns="columns"
+          :pagination="{rowsPerPage: 25}"
+          selection="single"
+          :selected.sync="selected"
+          row-key="date">
+            <div slot="top-left" slot-scope="props" class="row align-items-center">
+              <div>
+                <q-btn @click="modalTime = true" icon="note_add" color="blue">
+                  Adicionar registro
+                </q-btn>
+              </div>
+              </div>
+                <div slot="top-selection" slot-scope="props">
+                  <q-btn @click="editTime" color="primary" flat label="Editar" class="q-mr-sm" />
+                  <div class="col" />
+                </div>
+              <div slot="top-right" slot-scope="props" class="flex">
+                <div class="user__select">
+                  <q-select
+                  v-model="user"
+                  float-label="Bolsista"
+                  radio :options="usersList"
+                  />
+                </div>
+              </div>
+              <div slot="bottom" slot-scope="props" class="row text-black">
+                <mirro-resume :times="mirror" />
+            </div>
+        </q-table>
+      </q-tab-pane>
+      <q-tab-pane name="tab-2">
+        <q-table
+          no-data-label="Nenhum registro encontrado!"
+          :data="pendingTimes" :columns="columnsPeding"
+          :pagination="{rowsPerPage: 25}"
+          selection="single"
+          :selected.sync="selectedPending"
+          row-key="date">
+            <div slot="top-selection" slot-scope="props">
+              <q-btn @click="pedingTimeCheck(true)" color="secondary" flat label="Aceitar" class="q-mr-sm" />
+              <q-btn @click="pedingTimeCheck(false)" color="red" flat label="Rejeitar" class="q-mr-sm" />
+              <div class="col" />
+            </div>
+            <div slot="top-right" slot-scope="props" class="flex">
+              <span v-if="selectedPending[0]">
+                Usuário {{getUser(selectedPending[0].userId).name}}
+              </span>
+            </div>
+        </q-table>
+      </q-tab-pane>
+    </q-tabs>
     <q-modal v-model="modalTime" minimized>
       <div style="padding: 20px; max-width: 600px">
       <div class="q-display-1 q-mb-md">Formulário de ponto</div>
@@ -90,53 +117,65 @@ function getMonthDateRange () {
 
 const mothRange = getMonthDateRange()
 
+const columns = [
+  {
+    name: 'date',
+    label: 'Data',
+    field: 'date',
+    align: 'left',
+    format: val => moment(val).format('DD/MM/Y')
+  },
+  {
+    name: 'checkin',
+    label: 'Entrada',
+    field: 'checkin',
+    align: 'left',
+    format: val => moment(val).format('HH:mm')
+  },
+  {
+    name: 'checkout',
+    label: 'Saida',
+    field: 'checkout',
+    align: 'left',
+    format: val => {
+      return val ? moment(val).format('HH:mm') : '--:--'
+    }
+  },
+  {
+    name: 'worktime',
+    label: 'Tempo',
+    field: time => {
+      if (!time.checkout) return '--:--'
+      const wt = moment.duration(
+        new Date(time.checkout) - new Date(time.checkin)
+      )
+      return moment.utc(wt.asMilliseconds()).format('HH:mm')
+    },
+    align: 'left'
+  }
+]
+
+const column = {
+  name: 'justification',
+  label: 'Justificativa',
+  field: 'justification',
+  align: 'left'
+}
+
 export default {
   name: 'HistoryView',
   data () {
     return {
       modalTime: false,
       selected: [],
+      selectedPending: [],
       time: {},
       initDate: mothRange.start,
       endDate: mothRange.end,
-      columns: [
-        {
-          name: 'date',
-          label: 'Data',
-          field: 'date',
-          align: 'left',
-          format: val => moment(val).format('DD/MM/Y')
-        },
-        {
-          name: 'checkin',
-          label: 'Entrada',
-          field: 'checkin',
-          align: 'left',
-          format: val => moment(val).format('HH:mm')
-        },
-        {
-          name: 'checkout',
-          label: 'Saida',
-          field: 'checkout',
-          align: 'left',
-          format: val => {
-            return val ? moment(val).format('HH:mm') : '--:--'
-          }
-        },
-        {
-          name: 'worktime',
-          label: 'Tempo',
-          field: time => {
-            if (!time.checkout) return '--:--'
-            const wt = moment.duration(
-              new Date(time.checkout) - new Date(time.checkin)
-            )
-            return moment.utc(wt.asMilliseconds()).format('HH:mm')
-          },
-          align: 'left'
-        }
-      ],
+      columns: columns,
+      columnsPeding: [...columns, column],
       mirror: [],
+      pendingTimes: [],
       user: null,
       users: []
     }
@@ -162,12 +201,20 @@ export default {
         }
       })
     },
-    async request () {
+    async requestActivedUsers () {
       try {
         const { data } = await users.getActived()
         this.users = data.data
         this.user = this.users[0]._id
         this.getMirror(this.user)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async getPendingTimes () {
+      try {
+        const { data } = await ponto.getPendingTimes()
+        this.pendingTimes = data.data
       } catch (error) {
         console.log(error)
       }
@@ -195,13 +242,28 @@ export default {
       if (this.time._id) {
         newTime._id = this.time._id
       }
-      ponto.save(newTime)
-        .then(result => {
-          alert('Dados gravados!')
-          this.modalTime = false
-          this.time = {}
-          this.getMirror(this.user)
-        })
+      ponto.save(newTime).then(result => {
+        alert('Dados gravados!')
+        this.modalTime = false
+        this.time = {}
+        this.getMirror(this.user)
+      })
+    },
+    async pedingTimeCheck (action) {
+      const time = this.selectedPending[0]
+      time.pending = false
+      time.rejected = !action
+      try {
+        ponto.save(time)
+        alert(action ? 'Pedido aceito!' : 'Pedido rejeitado!')
+        this.getPendingTimes()
+      } catch (error) {
+        alert('Erro na comunicação com servidor!', error)
+      }
+    },
+    getUser (id) {
+      console.log(id)
+      return this.users.find(u => (u._id === id))
     }
   },
   computed: {
@@ -220,14 +282,15 @@ export default {
     }
   },
   created () {
-    this.request()
+    this.requestActivedUsers()
+    this.getPendingTimes()
   }
 }
 </script>
 
 <style>
-  .user__select {
-    width: 100%;
-    min-width: 300px;
-  }
+.user__select {
+  width: 100%;
+  min-width: 300px;
+}
 </style>
