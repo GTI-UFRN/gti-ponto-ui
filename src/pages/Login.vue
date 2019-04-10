@@ -56,7 +56,12 @@ export default {
       auth.getToken(username, password)
         .then((user) => {
           window.user = user
-          user.rules.includes('admin') ? this.$router.push('/dashborad') : this.$router.push('/')
+          if (user.rules.includes('admin')) {
+            localStorage.setItem('user', JSON.stringify(user))
+            this.$router.push('/dashborad')
+          } else {
+            this.$router.push('/')
+          }
           this.username = this.password = ''
         })
         .catch((e) => {
@@ -75,6 +80,15 @@ export default {
         }).catch(err => {
           alert('Erro ao criar usuário:', err)
         })
+    }
+  },
+  created () {
+    const user = JSON.parse(localStorage.getItem('user'))
+    console.log(user)
+    if (user) {
+      auth.setToken(user.token)
+      window.user = user
+      user.rules.includes('admin') ? this.$router.push('/dashborad') : this.$router.push('/')
     }
   }
 }

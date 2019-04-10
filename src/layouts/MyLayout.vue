@@ -71,6 +71,7 @@ export default {
     openURL,
     logout () {
       delete window.user
+      localStorage.removeItem('user')
       this.$router.push('/login')
     },
     gotTo (path) {

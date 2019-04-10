@@ -1,6 +1,6 @@
 {
   "name": "gti-ponto",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "description": "Sistema de ponto bolsistas gti",
   "productName": "GTI Ponto",
   "cordovaId": "br.eaj.gti.ponto",

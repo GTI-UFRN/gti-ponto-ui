@@ -15,11 +15,16 @@ const api = {
         username,
         password
       })
-      instance.defaults.headers.common['Authorization'] = 'Bearer ' + data.token
-      return parseJwt(data.token)
+      this.setToken(data.token)
+      const user = parseJwt(data.token)
+      user.token = data.token
+      return user
     } catch (error) {
       throw error
     }
+  },
+  setToken (token) {
+    instance.defaults.headers.common['Authorization'] = 'Bearer ' + token
   },
   getUser (id) {
     return instance.get('/users/' + id)
