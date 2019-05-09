@@ -1,29 +1,59 @@
 <template>
   <q-page padding>
+    <h1 class="q-headline">Resumo</h1>
     <div class="row">
       <div class="col-xs-12 col-md-6 col-lg-4">
-        <h1 class="q-headline">Resumo</h1>
-        <q-list highlight>
-          <q-list-header>Bolsistas</q-list-header>
-          <q-item v-for="user in users" :key="user._id" separator>
-            <q-item-side>
-              <q-item-tile avatar>
-                <img :src="user.photoURL || 'https://png.pngtree.com/svg/20161212/personal_default_avatar_for_mobile_phone_app__146524.png'">
-              </q-item-tile>
-            </q-item-side>
-            <q-item-main>
-              <q-item-tile label>
-                <a @click="showModal(user)">{{user.name}}</a>
-              </q-item-tile>
-              <q-item-tile sublabel>
-                <b>Chamados Abertos</b> {{ getCountOpenedOfOccurrences(user) }} <br>
-              </q-item-tile>
-            </q-item-main>
-            <q-item-side right>
-              <q-item-tile icon="fiber_manual_record" :color="getUserStatus(user)" />
-            </q-item-side>
-          </q-item>
-        </q-list>
+        <q-tabs color="green">
+          <q-tab label="Bolsistas" default slot="title" name="tab-1" />
+          <q-tab label="Estágiarios" slot="title" name="tab-2" />
+          <q-tab-pane name="tab-1">
+            <q-list highlight>
+              <q-list-header>Bolsistas</q-list-header>
+              <q-item v-for="user in usersBytype('bolsista')" :key="user._id" separator>
+                <q-item-side>
+                  <q-item-tile avatar>
+                    <img :src="user.photoURL || 'https://png.pngtree.com/svg/20161212/personal_default_avatar_for_mobile_phone_app__146524.png'">
+                  </q-item-tile>
+                </q-item-side>
+                <q-item-main>
+                  <q-item-tile label>
+                    <a @click="showModal(user)">{{user.name}}</a>
+                  </q-item-tile>
+                  <q-item-tile sublabel>
+                    <b>Chamados Abertos</b> {{ getCountOpenedOfOccurrences(user) }} <br>
+                  </q-item-tile>
+                </q-item-main>
+                <q-item-side right>
+                  <q-item-tile icon="fiber_manual_record" :color="getUserStatus(user)" />
+                </q-item-side>
+              </q-item>
+            </q-list>
+          </q-tab-pane>
+          <q-tab-pane name="tab-2">
+            <q-list highlight>
+              <q-list-header>Estágiarios</q-list-header>
+              <q-item v-for="user in usersBytype('estagiario')" :key="user._id" separator>
+                <q-item-side>
+                  <q-item-tile avatar>
+                    <img :src="user.photoURL || 'https://png.pngtree.com/svg/20161212/personal_default_avatar_for_mobile_phone_app__146524.png'">
+                  </q-item-tile>
+                </q-item-side>
+                <q-item-main>
+                  <q-item-tile label>
+                    <a @click="showModal(user)">{{user.name}}</a>
+                  </q-item-tile>
+                  <q-item-tile sublabel>
+                    <b>Chamados Abertos</b> {{ getCountOpenedOfOccurrences(user) }} <br>
+                  </q-item-tile>
+                </q-item-main>
+                <q-item-side right>
+                  <q-item-tile icon="fiber_manual_record" :color="getUserStatus(user)" />
+                </q-item-side>
+              </q-item>
+            </q-list>
+          </q-tab-pane>
+
+        </q-tabs>
       </div>
     </div>
     <q-modal v-model="showProfile">
@@ -60,6 +90,9 @@ export default {
     showModal (user) {
       this.showProfile = true
       this.userProfile = user
+    },
+    usersBytype (type) {
+      return this.users.filter(user => user.type === type)
     },
     getUserStatus ({ _id }) {
       const id = this.times.find(t => t.userId === _id)
