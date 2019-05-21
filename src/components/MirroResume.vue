@@ -24,7 +24,8 @@ export default {
   computed: {
     resume: function () {
       const sum = this.times.reduce((ac, at) => (ac + sumTime(at)), 0)
-      return moment.duration(sum).asHours().toString().split('.')[0]
+      const duration = moment.duration(sum)
+      return duration.hours() + 'h:' + duration.minutes() + 'm'
     }
   }
 }
