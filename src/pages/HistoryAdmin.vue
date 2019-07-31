@@ -130,7 +130,7 @@ const columns = [
     label: 'Entrada',
     field: 'checkin',
     align: 'left',
-    format: val => moment(val).format('HH:mm')
+    format: val => moment(val).format('HH:mm:ss')
   },
   {
     name: 'checkout',
@@ -138,7 +138,7 @@ const columns = [
     field: 'checkout',
     align: 'left',
     format: val => {
-      return val ? moment(val).format('HH:mm') : '--:--'
+      return val ? moment(val).format('HH:mm:ss') : '--:--'
     }
   },
   {
@@ -149,7 +149,7 @@ const columns = [
       const wt = moment.duration(
         new Date(time.checkout) - new Date(time.checkin)
       )
-      return moment.utc(wt.asMilliseconds()).format('HH:mm')
+      return moment.utc(wt.asMilliseconds()).format('HH:mm:ss')
     },
     align: 'left'
   }
